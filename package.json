@@ -1,0 +1,13 @@
+{
+  "name": "mmo_demo",
+  "version": "1.0.0",
+  "description": "mmo example with phaser express and socket.io",
+  "author": "Marwane",
+  "license": "ISC",
+  "devDependencies": {
+    "auto-reload-brunch": "^1.8.0",
+    "brunch": "^1.8.5",
+    "javascript-brunch": "^1.7.1",
+    "less-brunch": "^1.8.1"
+  }
+}
