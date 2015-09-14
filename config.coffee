@@ -2,8 +2,6 @@ module.exports = config:
   paths:
     "watched": ["client", "vendor"]
     "public": "public"
-  conventions:
-    "vendor": /(^bower_components|node_modules|vendor)[\\/]/
   files:
     javascripts:
       joinTo:
