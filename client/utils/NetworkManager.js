@@ -1,6 +1,8 @@
 'use stric';
 
 var serverSocket, mainPlayer;
+var otherPlayersInfos = [];
+var onOtherPlayerConnectedCallback;
 
 var networkManager = {
     connected: false,
@@ -16,6 +18,14 @@ var networkManager = {
         if (!networkManager.connected) return;
 
         serverSocket.emit('PLAYER_INFO', playerInfo);
+    },
+    getNextPendingPlayer: function(){
+        if(otherPlayersInfos.length > 0){
+            otherPlayersInfos.shift();
+        }
+    },
+    onOtherPlayerConnected: function(callback){
+        onOtherPlayerConnectedCallback = callback;
     }
 };
 
@@ -31,6 +41,10 @@ function onReceivePlayerId(data) {
 
 function onPlayerConnected(otherPlayer){
     console.log('Player connected', otherPlayer);
+    otherPlayersInfos.push(otherPlayer);
+    onOtherPlayerConnectedCallback(otherPlayer);
 }
+
+
 
 module.exports = networkManager;

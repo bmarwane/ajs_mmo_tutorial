@@ -45,7 +45,12 @@ Play.prototype = {
     },
 
     connectToServer: function(){
+        var me = this;
         NetworkManager.connect(this.player);
+        NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
+            me.addOtherPlayer(otherPlayerInfo);
+        });
+        this.otherPlayers = [];
     },
 
     update: function(){
@@ -71,6 +76,13 @@ Play.prototype = {
         if(this.player.moving){
             NetworkManager.sendPlayerInfo(this.player.getInfo());
         }
+    },
+
+    addOtherPlayer: function(otherPlayerInfo){
+        console.log('adding other player');
+        console.log(this);
+        var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, false);
+        //this.otherPlayers.push(otherPlayer);
     }
 };
 

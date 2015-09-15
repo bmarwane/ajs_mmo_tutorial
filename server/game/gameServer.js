@@ -5,13 +5,11 @@ var socketIO;
 
 var GameServer = function(io){
     socketIO = io;
-
     return {
         start: function(){
             socketIO.on('connection', onClientConnected);
         }
     };
-
 };
 
 function onClientConnected(client){
@@ -25,7 +23,6 @@ function onClientConnected(client){
     });
 
     client.on('PLAYER_INFO', function(data) {
-        console.log('player info', data.x);
     });
 }
 

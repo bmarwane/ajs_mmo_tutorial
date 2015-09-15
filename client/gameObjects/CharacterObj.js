@@ -2,8 +2,9 @@
 
 var CharacterSpr = require('client/gameSprites/CharacterSpr');
 
-var CharacterObj = function(game, x, y) {
+var CharacterObj = function(game, x, y, isMainPlayer) {
     this.game = game;
+    this.isMainPlayer = isMainPlayer;
     this.moveSpeed = 100;
     this.moving = false;
     this.info = {};
@@ -13,7 +14,7 @@ var CharacterObj = function(game, x, y) {
 };
 
 CharacterObj.prototype.setupSprite = function(x, y){
-    this.sprite = new CharacterSpr(this.game, x, y);
+    this.sprite = new CharacterSpr(this.game, x, y, this.isMainPlayer);
     this.game.add.existing(this.sprite);
 };
 
