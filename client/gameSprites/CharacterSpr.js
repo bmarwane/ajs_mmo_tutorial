@@ -1,8 +1,10 @@
 'use strict';
 
-var CharacterSpr = function(game, x, y) {
+var CharacterSpr = function(game, x, y, isMainPlayer) {
     Phaser.Sprite.call(this, game, x, y, 'sprites');
-    this.enableCollision();
+    if(isMainPlayer){
+        this.enableCollision();
+    }
     this.setupAnimations();
 };
 

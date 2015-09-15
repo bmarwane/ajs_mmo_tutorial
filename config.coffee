@@ -11,5 +11,10 @@ module.exports = config:
     stylesheets: joinTo: 'styles/client.css'
 
   server:
+    path: './server/httpServer.js'
     run: yes
     port: 9192
+
+  plugins:
+    autoReload:
+      port: 9193

@@ -1,6 +1,7 @@
 'use stric';
 
 var CharacterObj = require('client/gameObjects/CharacterObj');
+var NetworkManager = require('client/utils/NetworkManager');
 
 function Play(){}
 
@@ -12,6 +13,8 @@ Play.prototype = {
         this.initMap();
         this.addTestPlayer();
         this.setupKeys();
+
+        this.connectToServer();
     },
     initMap: function(){
         this.map = this.game.add.tilemap('map');
@@ -29,7 +32,7 @@ Play.prototype = {
     },
     addTestPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
-        this.player = new CharacterObj(this.game, 200, 200);
+        this.player = new CharacterObj(this.game, 200, 200, true);
         this.game.camera.follow(this.player.sprite);
     },
 
@@ -41,12 +44,16 @@ Play.prototype = {
         this.keys.right = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     },
 
+    connectToServer: function(){
+        NetworkManager.connect(this.player);
+    },
+
     update: function(){
         this.handlePlayerInputs();
-        this.player.update();
     },
 
     handlePlayerInputs: function(){
+
         this.player.stopIfNoInput();
         if(this.keys.up.isDown){
             this.player.moveUp();
@@ -59,6 +66,10 @@ Play.prototype = {
         }
         if(this.keys.right.isDown){
             this.player.moveRight();
+        }
+
+        if(this.player.moving){
+            NetworkManager.sendPlayerInfo(this.player.getInfo());
         }
     }
 };
