@@ -59,4 +59,8 @@ CharacterSpr.prototype.walkRight = function(){
     this.animations.play("walk_side",6,true);
 };
 
+CharacterSpr.prototype.stopAnimation = function(){
+    this.animations.stop();
+};
+
 module.exports = CharacterSpr;

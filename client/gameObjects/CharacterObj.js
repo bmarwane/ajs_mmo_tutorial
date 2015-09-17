@@ -7,12 +7,13 @@ var Pathfinder = require('client/utils/Pathfinder');
 var CharacterObj = function(game, x, y, isMainPlayer) {
     this.configure(game, isMainPlayer);
     this.setupSprite(x, y);
+    this.resetCurrentTweens();
 };
 
 CharacterObj.prototype.configure = function(game, isMainPlayer){
     this.game = game;
     this.isMainPlayer = isMainPlayer;
-    this.moveSpeed = 100;
+    this.moveDuration = 500;
     this.info = {};
 
     this.currentTweens = [];
@@ -24,34 +25,17 @@ CharacterObj.prototype.setupSprite = function(x, y){
     this.sprite = new CharacterSpr(this.game, x, y, this.isMainPlayer);
     this.game.add.existing(this.sprite);
 
-    this.sprite.walkRight();
+    this.sprite.walkDown();
 };
-
-CharacterObj.prototype.getCellX= function(col){
-    return col * 32;
-};
-CharacterObj.prototype.getCellY= function(col){
-    return col * 32;
-};
-
-CharacterObj.prototype.getTileX = function(value){
-    return Pathfinder.walkableLayer.getTileX(value);
-};
-CharacterObj.prototype.getTileY = function(value){
-    return Pathfinder.walkableLayer.getTileY(value);
-};
-
 
 CharacterObj.prototype.moveTo = function(targetX, targetY, pathReadyCallback){
     var me = this;
 
     Pathfinder.calculatePath(
-        this.getTileX(this.sprite.position.x),
-        this.getTileY(this.sprite.position.y),
-
-        this.getTileX(targetX),
-        this.getTileY(targetY),
-
+        this.sprite.position.x,
+        this.sprite.position.y,
+        targetX,
+        targetY,
         function(path) {
             if (pathReadyCallback !== undefined || typeof pathReadyCallback === "function") {
                 pathReadyCallback(path);
@@ -59,7 +43,6 @@ CharacterObj.prototype.moveTo = function(targetX, targetY, pathReadyCallback){
             me.onReadyToMove(me, path);
         }
     );
-
 };
 
 
@@ -76,23 +59,26 @@ CharacterObj.prototype.resetCurrentTweens  = function(){
     });
     this.currentTweens = [];
     this.moving = false;
+    this.sprite.stopAnimation();
 };
 
 CharacterObj.prototype.prepareMovement = function(listPoints){
     listPoints = listPoints || [];
     this.currentTweens = [];
-
     var me = this;
 
     listPoints.map(function(point){
-        me.currentTweens.push(me.moveToXY(point.x * 32, point.y * 32));
+        me.currentTweens.push(me.getTweenToCoordinate(point.x, point.y));
     });
 
 };
 
-CharacterObj.prototype.moveToXY = function(x, y){
+CharacterObj.prototype.getTweenToCoordinate = function(x, y){
     var tween = this.game.add.tween(this.sprite.position);
-    tween.to({x:x,y:y},this.moveSpeed);
+
+    x = (x * Pathfinder.tileSize) + Pathfinder.tileSize / 2;
+    y = (y * Pathfinder.tileSize) + Pathfinder.tileSize / 2;
+    tween.to({ x:x, y:y }, this.moveDuration);
     return tween;
 };
 
@@ -108,9 +94,11 @@ CharacterObj.prototype.moveInPath = function() {
 
 
     function moveToNext(tween){
+
         index ++;
         var nextTween = me.currentTweens[index];
         if(nextTween != null){
+
             tween.onComplete.add(function(){
                 me.tweenInProgress = false;
                 moveToNext(nextTween);
@@ -122,29 +110,39 @@ CharacterObj.prototype.moveInPath = function() {
             });
         }
 
-        if(me.willTweenToNext()){
-            tween.start();
-            me.tweenInProgress = true;
-        }else{
-            me.onMovementInterrupted();
-        }
+        tween.start();
+        me.faceNextTile(tween);
+
+        me.tweenInProgress = true;
     }
 };
 
-CharacterObj.prototype.onMovementInterrupted = function(){
+CharacterObj.prototype.faceNextTile = function(tween){
 
+    var isVerticalMovement = tween.properties.y == this.sprite.position.y;
+
+    if(isVerticalMovement) {
+        if(tween.properties.x > this.sprite.position.x){
+            this.sprite.walkRight();
+        } else {
+            this.sprite.walkLeft();
+        }
+    } else {
+        if(tween.properties.y > this.sprite.position.y){
+            this.sprite.walkDown();
+        } else {
+            this.sprite.walkUp();
+        }
+
+    }
 };
+
 
 
 CharacterObj.prototype.onStopMovement = function(){
     this.resetCurrentTweens();
 
 };
-
-CharacterObj.prototype.willTweenToNext = function(){
-    return true;
-};
-
 
 CharacterObj.prototype.setPosition = function(x, y){
     this.sprite.position.x = x;

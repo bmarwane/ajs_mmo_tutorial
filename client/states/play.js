@@ -15,7 +15,7 @@ Play.prototype = {
         this.initMap();
         this.initPathfinder();
         this.initCursor();
-        this.addTestPlayer();
+        this.addMainPlayer();
 
         this.connectToServer();
     },
@@ -39,26 +39,32 @@ Play.prototype = {
         Pathfinder.init(this.game,
                         this.walkableLayer,
                         this.map.layers[3].data, // the layer containing the walkable tiles
-                        [2017]); // ID of the walkable tile ( the green one )
+                        [2017], // ID of the walkable tile ( the green one )
+                        32
+        );
     },
 
     initCursor: function(){
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.marker = this.game.add.graphics();
         this.marker.lineStyle(2, 0x000000, 1);
-        this.marker.drawRect(0, 0, 32, 32);
+        this.marker.drawRect(0, 0, Pathfinder.tileSize, Pathfinder.tileSize);
 
         this.input.onDown.add(function(event){
-            this.marker.x = this.walkableLayer.getTileX(this.game.input.activePointer.worldX) * 32;
-            this.marker.y = this.walkableLayer.getTileY(this.game.input.activePointer.worldY) * 32;
+            this.updateCursorPosition();
             this.player.moveTo(this.marker.x, this.marker.y, function(path){
-                console.log('end');
+
             });
         }, this);
 
     },
 
-    addTestPlayer: function(){
+    updateCursorPosition: function(){
+        this.marker.x = this.walkableLayer.getTileX(this.game.input.activePointer.worldX) * 32;
+        this.marker.y = this.walkableLayer.getTileY(this.game.input.activePointer.worldY) * 32;
+    },
+
+    addMainPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
         this.player = new CharacterObj(this.game, 200, 200, true);
         this.game.camera.follow(this.player.sprite);
@@ -78,7 +84,11 @@ Play.prototype = {
         console.log(this);
         var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, false);
         //this.otherPlayers.push(otherPlayer);
-    }
+    },
+
+    update: function(){
+        this.updateCursorPosition();
+    },
 };
 
 module.exports = Play;
