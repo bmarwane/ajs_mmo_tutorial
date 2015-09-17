@@ -8,6 +8,13 @@ module.exports = config:
         'js/client.js': /^client/
         'js/vendor.js': /^vendor/
 
+      order:
+        before: [
+          'vendor/phaser.js',
+          'vendor/easystar-0.2.1.min.js',
+          'vendor/phaser_pathfinding.min.js',
+        ]
+
     stylesheets: joinTo: 'styles/client.css'
 
   server:
