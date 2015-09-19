@@ -1,7 +1,6 @@
 'use stric';
 
 var CharacterObj = require('client/gameObjects/CharacterObj');
-var NetworkManager = require('client/utils/NetworkManager');
 var Pathfinder = require('client/utils/Pathfinder');
 
 function Play(){}
@@ -9,7 +8,6 @@ function Play(){}
 Play.prototype = {
     create: function(){
         this.game.stage.backgroundColor = 0xFFFFFF;
-        //this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.initMap();
@@ -17,7 +15,6 @@ Play.prototype = {
         this.initCursor();
         this.addMainPlayer();
 
-        this.connectToServer();
     },
     initMap: function(){
         this.map = this.game.add.tilemap('map');
@@ -45,7 +42,6 @@ Play.prototype = {
     },
 
     initCursor: function(){
-        this.cursors = this.game.input.keyboard.createCursorKeys();
         this.marker = this.game.add.graphics();
         this.marker.lineStyle(2, 0x000000, 1);
         this.marker.drawRect(0, 0, Pathfinder.tileSize, Pathfinder.tileSize);
@@ -70,25 +66,9 @@ Play.prototype = {
         this.game.camera.follow(this.player.sprite);
     },
 
-    connectToServer: function(){
-        var me = this;
-        NetworkManager.connect(this.player);
-        NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
-            me.addOtherPlayer(otherPlayerInfo);
-        });
-        this.otherPlayers = [];
-    },
-
-    addOtherPlayer: function(otherPlayerInfo){
-        console.log('adding other player');
-        console.log(this);
-        var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, false);
-        //this.otherPlayers.push(otherPlayer);
-    },
-
     update: function(){
         this.updateCursorPosition();
-    },
+    }
 };
 
 module.exports = Play;

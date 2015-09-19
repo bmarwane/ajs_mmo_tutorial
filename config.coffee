@@ -25,3 +25,5 @@ module.exports = config:
   plugins:
     autoReload:
       port: 9193
+    uglify:
+      mangle: false
