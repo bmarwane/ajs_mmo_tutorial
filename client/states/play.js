@@ -2,6 +2,7 @@
 
 var CharacterObj = require('client/gameObjects/CharacterObj');
 var Pathfinder = require('client/utils/Pathfinder');
+var NetworkManager = require('client/utils/NetworkManager');
 
 function Play(){}
 
@@ -14,6 +15,8 @@ Play.prototype = {
         this.initPathfinder();
         this.initCursor();
         this.addMainPlayer();
+
+        this.connectToServer();
 
     },
     initMap: function(){
@@ -62,13 +65,43 @@ Play.prototype = {
 
     addMainPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
-        this.player = new CharacterObj(this.game, 200, 200, true);
+        this.player = new CharacterObj(this.game, 6 * Pathfinder.tileSize, 6 * Pathfinder.tileSize, true);
         this.game.camera.follow(this.player.sprite);
+    },
+
+    connectToServer: function(){
+        var me = this;
+        NetworkManager.connect(this.player);
+        NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
+            me.addOtherPlayer(otherPlayerInfo);
+        });
+        NetworkManager.onOtherPlayerMove(function(movementInfo){
+            var otherPlayerToMove = searchById(me.otherPlayers, movementInfo.info.uid);
+            if(otherPlayerToMove){
+                otherPlayerToMove.moveTo(movementInfo.x, movementInfo.y);
+            }
+        });
+        this.otherPlayers = [];
+    },
+
+    addOtherPlayer: function(otherPlayerInfo){
+        var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, true);
+        otherPlayer.uid = otherPlayerInfo.uid;
+        this.otherPlayers.push(otherPlayer);
     },
 
     update: function(){
         this.updateCursorPosition();
     }
 };
+
+function searchById(array, id){
+    for(var i = 0, max = array.length; i < max; i++){
+        if(array[i].getInfo().uid === id){
+            return array[i];
+        }
+    }
+    return undefined;
+}
 
 module.exports = Play;

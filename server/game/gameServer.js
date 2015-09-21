@@ -14,16 +14,27 @@ var GameServer = function(io){
 
 function onClientConnected(client){
     console.log('Client connected ...');
+    client.on('REQUEST_ID', onRequestId);
+    client.on('NOTIFY_PLAYER_MOVEMENT', onNotifyPlayerMovement);
 
-    client.on('REQUEST_ID', function(playerInfo) {
+    function onRequestId(playerInfo) {
+        // respond the connected player with his ID
         client.emit('PLAYER_ID', client.id);
 
+        // notify all the other players that a new player is connected
+        notifyConnectedPlayer(client, playerInfo);
+    }
+
+    function notifyConnectedPlayer(client, playerInfo){
         playerInfo.uid = client.id;
         client.broadcast.emit('PLAYER_CONNECTED', playerInfo);
-    });
+    }
 
-    client.on('PLAYER_INFO', function(data) {
-    });
+    function onNotifyPlayerMovement(movementInfo){
+        console.log("Moving Player", movementInfo);
+        client.broadcast.emit('OTHER_PLAYER_MOVED', movementInfo);
+
+    }
 }
 
 

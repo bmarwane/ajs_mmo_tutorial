@@ -3,21 +3,18 @@
 var serverSocket, mainPlayer;
 var otherPlayersInfos = [];
 var onOtherPlayerConnectedCallback;
+var onOtherPlayerMove;
 
 var networkManager = {
     connected: false,
     connect: function (player) {
         mainPlayer = player;
-        serverSocket = io.connect('http://localhost:9192');
+        serverSocket = io.connect('http://192.168.1.7:9192');
         serverSocket.on('connect', onConnectedToServer);
         serverSocket.on('PLAYER_ID', onReceivePlayerId);
 
         serverSocket.on('PLAYER_CONNECTED', onPlayerConnected);
-    },
-    sendPlayerInfo: function (playerInfo) {
-        if (!networkManager.connected) return;
-
-        serverSocket.emit('PLAYER_INFO', playerInfo);
+        serverSocket.on('REQUEST_PLAYER_LIST', onRequestPlayerList);
     },
     getNextPendingPlayer: function(){
         if(otherPlayersInfos.length > 0){
@@ -26,6 +23,12 @@ var networkManager = {
     },
     onOtherPlayerConnected: function(callback){
         onOtherPlayerConnectedCallback = callback;
+    },
+    onOtherPlayerMove: function(callback){
+        onOtherPlayerMove = callback;
+    },
+    notifyMovement: function(movementInfo){
+        serverSocket.emit('NOTIFY_PLAYER_MOVEMENT', movementInfo);
     }
 };
 
@@ -34,17 +37,19 @@ function onConnectedToServer() {
     serverSocket.emit('REQUEST_ID', mainPlayer.getInfo());
 }
 
-function onReceivePlayerId(data) {
-    console.log('My ID', data);
-    mainPlayer.uid = data;
+function onReceivePlayerId(mainPlayerID) {
+    mainPlayer.uid = mainPlayerID;
 }
 
 function onPlayerConnected(otherPlayer){
-    console.log('Player connected', otherPlayer);
+    console.log('a player is connected', otherPlayer);
     otherPlayersInfos.push(otherPlayer);
     onOtherPlayerConnectedCallback(otherPlayer);
 }
 
+function onOtherPlayerMoved(movementInfo){
+    onOtherPlayerMove(movementInfo);
+}
 
 
 module.exports = networkManager;

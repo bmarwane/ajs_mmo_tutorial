@@ -2,6 +2,7 @@
 
 var CharacterSpr = require('client/gameSprites/CharacterSpr');
 var Pathfinder = require('client/utils/Pathfinder');
+var NetworkManager = require('client/utils/NetworkManager');
 
 
 var CharacterObj = function(game, x, y, isMainPlayer) {
@@ -30,6 +31,10 @@ CharacterObj.prototype.setupSprite = function(x, y){
 
 CharacterObj.prototype.moveTo = function(targetX, targetY, pathReadyCallback){
     var me = this;
+
+    if(this.isMainPlayer) {
+        NetworkManager.notifyMovement({x: targetX, y: targetY, info: this.getInfo()})
+    }
 
     Pathfinder.calculatePath(
         this.sprite.position.x,
