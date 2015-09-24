@@ -154,6 +154,10 @@ CharacterObj.prototype.setPosition = function(x, y){
     this.sprite.position.y = y;
 };
 
+CharacterObj.prototype.destroy = function(){
+  this.sprite.destroy();
+};
+
 
 CharacterObj.prototype.getInfo = function(){
   this.info.x = this.sprite.position.x;

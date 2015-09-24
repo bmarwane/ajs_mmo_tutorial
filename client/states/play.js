@@ -51,7 +51,7 @@ Play.prototype = {
 
         this.input.onDown.add(function(event){
             this.updateCursorPosition();
-            this.player.moveTo(this.marker.x, this.marker.y, function(path){
+            this.mainPlayer.moveTo(this.marker.x, this.marker.y, function(path){
 
             });
         }, this);
@@ -65,13 +65,13 @@ Play.prototype = {
 
     addMainPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
-        this.player = new CharacterObj(this.game, 6 * Pathfinder.tileSize, 6 * Pathfinder.tileSize, true);
-        this.game.camera.follow(this.player.sprite);
+        this.mainPlayer = new CharacterObj(this.game, 6 * Pathfinder.tileSize, 6 * Pathfinder.tileSize, true);
+        this.game.camera.follow(this.mainPlayer.sprite);
     },
 
     connectToServer: function(){
         var me = this;
-        NetworkManager.connect(this.player);
+        NetworkManager.connect(this.mainPlayer);
         NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
             me.addOtherPlayer(otherPlayerInfo);
         });
@@ -81,13 +81,52 @@ Play.prototype = {
                 otherPlayerToMove.moveTo(movementInfo.x, movementInfo.y);
             }
         });
+
+        NetworkManager.onUpdatePlayerList(function(receivedList){
+            me.removeDisconnected(receivedList);
+            me.addConnected(receivedList);
+
+        });
         this.otherPlayers = [];
     },
 
     addOtherPlayer: function(otherPlayerInfo){
-        var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, true);
+        var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, false);
         otherPlayer.uid = otherPlayerInfo.uid;
         this.otherPlayers.push(otherPlayer);
+    },
+
+    removeDisconnected: function(receivedList){
+        var newOtherPlayers = [];
+        for(var i = 0, max = this.otherPlayers.length; i<max; i++){
+            var otherPlayer = this.otherPlayers[i];
+            // test if the player on this browser is still on the server list
+            var playerInList = searchById(receivedList, otherPlayer.uid);
+
+            if(playerInList){
+                // keep the player
+                newOtherPlayers.push(otherPlayer);
+            } else {
+                // remove from the game
+                otherPlayer.destroy();
+            }
+        }
+        this.otherPlayers = newOtherPlayers;
+    },
+
+    addConnected: function(receivedList){
+        // search in the list if an element is not present in the otherPlayers, and not mainPlayer Add it
+
+        for(var i = 0, max = receivedList.length; i<max;i++){
+            var receivedPlayer = receivedList[i];
+            if(receivedPlayer.uid !== this.mainPlayer.uid){
+                var connectedPlayer = searchById(this.otherPlayers, receivedPlayer.uid);
+                if(!connectedPlayer){
+                    this.addOtherPlayer(receivedPlayer);
+                }
+            }
+
+        }
     },
 
     update: function(){
@@ -97,11 +136,18 @@ Play.prototype = {
 
 function searchById(array, id){
     for(var i = 0, max = array.length; i < max; i++){
-        if(array[i].getInfo().uid === id){
+        var uid = array[i].getInfo ? array[i].getInfo().uid : array[i].uid;
+        if(array[i] != null && uid === id){
             return array[i];
         }
     }
     return undefined;
+}
+
+function removeElementById(array, id){
+    return array.filter(function( obj ) {
+        return obj.uid !== id;
+    });
 }
 
 module.exports = Play;
