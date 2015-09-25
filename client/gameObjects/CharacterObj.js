@@ -22,8 +22,11 @@ CharacterObj.prototype.configure = function(game, isMainPlayer){
     this.tweenInProgress = false;
 };
 
-CharacterObj.prototype.setupSprite = function(x, y){
-    this.sprite = new CharacterSpr(this.game, x, y, this.isMainPlayer);
+CharacterObj.prototype.setupSprite = function(tileX, tileY){
+    var targetX = (tileX * Pathfinder.tileSize) + (Pathfinder.tileSize / 2);
+    var targetY = (tileY * Pathfinder.tileSize) + (Pathfinder.tileSize / 2);
+
+    this.sprite = new CharacterSpr(this.game, targetX, targetY, this.isMainPlayer);
     this.game.add.existing(this.sprite);
 
     this.sprite.walkDown();
@@ -33,7 +36,7 @@ CharacterObj.prototype.moveTo = function(targetX, targetY, pathReadyCallback){
     var me = this;
 
     if(this.isMainPlayer) {
-        NetworkManager.notifyMovement({x: targetX, y: targetY, info: this.getInfo()})
+        NetworkManager.notifyMovement({x: targetX, y: targetY, uid: this.uid})
     }
 
     Pathfinder.calculatePath(

@@ -1,7 +1,6 @@
 'use stric';
 
 var serverSocket, mainPlayer;
-var otherPlayersInfos = [];
 var onOtherPlayerConnectedCallback;
 var onOtherPlayerMove;
 var onUpdatePlayerListCallback;
@@ -12,16 +11,16 @@ var networkManager = {
         mainPlayer = player;
         serverSocket = io.connect('http://localhost:9192');
         serverSocket.on('connect', onConnectedToServer);
+
+        this.configureIncomingTraffic();
+
+    },
+    configureIncomingTraffic: function(){
         serverSocket.on('SERVER_PLAYER_ID', onReceivePlayerId);
 
         serverSocket.on('SERVER_PLAYER_CONNECTED', onPlayerConnected);
         serverSocket.on('SERVER_PLAYER_LIST', onReceivePlayerList);
         serverSocket.on('SERVER_OTHER_PLAYER_MOVED', onOtherPlayerMoved);
-    },
-    getNextPendingPlayer: function(){
-        if(otherPlayersInfos.length > 0){
-            otherPlayersInfos.shift();
-        }
     },
     onOtherPlayerConnected: function(callback){
         onOtherPlayerConnectedCallback = callback;
@@ -51,7 +50,6 @@ function onReceivePlayerId(mainPlayerID) {
 
 function onPlayerConnected(otherPlayer){
     console.log('a player is connected', otherPlayer);
-    otherPlayersInfos.push(otherPlayer);
     onOtherPlayerConnectedCallback(otherPlayer);
 }
 

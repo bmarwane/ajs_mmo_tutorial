@@ -37,7 +37,7 @@ function onClientConnected(client){
     function onNotifyPlayerMovement(movementInfo){
         client.broadcast.emit('SERVER_OTHER_PLAYER_MOVED', movementInfo);
         // update state on server
-        var concernedPlayer = getPlayerById(movementInfo.info.uid);
+        var concernedPlayer = getPlayerById(movementInfo.uid);
         if(concernedPlayer){
             concernedPlayer.x = movementInfo.x;
             concernedPlayer.y = movementInfo.y;

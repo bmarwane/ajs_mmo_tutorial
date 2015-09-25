@@ -65,7 +65,7 @@ Play.prototype = {
 
     addMainPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
-        this.mainPlayer = new CharacterObj(this.game, 6 * Pathfinder.tileSize, 6 * Pathfinder.tileSize, true);
+        this.mainPlayer = new CharacterObj(this.game, 6, 6, true);
         this.game.camera.follow(this.mainPlayer.sprite);
     },
 
@@ -76,7 +76,7 @@ Play.prototype = {
             me.addOtherPlayer(otherPlayerInfo);
         });
         NetworkManager.onOtherPlayerMove(function(movementInfo){
-            var otherPlayerToMove = searchById(me.otherPlayers, movementInfo.info.uid);
+            var otherPlayerToMove = searchById(me.otherPlayers, movementInfo.uid);
             if(otherPlayerToMove){
                 otherPlayerToMove.moveTo(movementInfo.x, movementInfo.y);
             }
