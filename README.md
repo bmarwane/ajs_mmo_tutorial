@@ -5,6 +5,13 @@ MMO game using Phaser.io Express and Socket.IO
 This is an example of an MMO game using phaser.IO socket.io and express.
 I wrote a tutorial in french that explains the steps to follow to write this example.
 
+[Link to the tutorial here.](http://localhost:9192/)
+
+
+Requirements
+-------------
+
+You need to install [NodeJS](https://nodejs.org) and [Brunch.io](http://brunch.io/) to run this example.
 
 Installation
 -------------
