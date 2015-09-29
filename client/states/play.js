@@ -65,7 +65,11 @@ Play.prototype = {
 
     addMainPlayer: function(){
         this.game.world.setBounds(0, 0, 1600, 1600);
-        this.mainPlayer = new CharacterObj(this.game, 6, 6, true);
+
+        var startX = (6 * Pathfinder.tileSize) + (Pathfinder.tileSize / 2);
+        var startY = (6 * Pathfinder.tileSize) + (Pathfinder.tileSize / 2);
+
+        this.mainPlayer = new CharacterObj(this.game, startX, startY, true);
         this.game.camera.follow(this.mainPlayer.sprite);
     },
 
