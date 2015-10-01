@@ -1,9 +1,9 @@
 "use strict";
 
 var gameBootstrapper = {
-    init: function(){
-        console.log('**** Game bootstrap ****');
-        var game = new Phaser.Game(800, 460, Phaser.AUTO, 'game');
+    init: function(gameContainerElementId){
+
+        var game = new Phaser.Game(800, 480, Phaser.AUTO, gameContainerElementId);
 
         game.state.add('boot', require('./states/boot'));
         game.state.add('play', require('./states/play'));

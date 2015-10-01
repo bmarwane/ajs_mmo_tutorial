@@ -17,6 +17,7 @@ function onClientConnected(client){
     client.on('CLIENT_REQUEST_ID', onRequestId);
     client.on('CLIENT_NOTIFY_PLAYER_MOVEMENT', onNotifyPlayerMovement);
     client.on('CLIENT_REQUEST_PLAYER_LIST', onRequestPlayerList);
+    client.on('CLIENT_CHAT_MESSAGE', onChatMessage);
 
     client.on('disconnect', onDisconnected);
 
@@ -51,6 +52,12 @@ function onClientConnected(client){
     function onDisconnected(){
         listPlayers = removeElementById(listPlayers, client.id);
         client.broadcast.emit('SERVER_PLAYER_LIST', listPlayers);
+    }
+
+
+    function onChatMessage(chatMessageInfo){
+        console.log('receive chat message', chatMessageInfo);
+        client.broadcast.emit('SERVER_PLAYER_CHAT_MESSAGE', chatMessageInfo);
     }
 }
 

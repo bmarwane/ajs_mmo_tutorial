@@ -4,6 +4,7 @@ var serverSocket, mainPlayer;
 var onOtherPlayerConnectedCallback;
 var onOtherPlayerMove;
 var onUpdatePlayerListCallback;
+var onReceiveChatMessageCallback;
 
 var networkManager = {
     connected: false,
@@ -21,6 +22,7 @@ var networkManager = {
         serverSocket.on('SERVER_PLAYER_CONNECTED', onPlayerConnected);
         serverSocket.on('SERVER_PLAYER_LIST', onReceivePlayerList);
         serverSocket.on('SERVER_OTHER_PLAYER_MOVED', onOtherPlayerMoved);
+        serverSocket.on('SERVER_PLAYER_CHAT_MESSAGE', onReceiveChatMessage);
     },
     onOtherPlayerConnected: function(callback){
         onOtherPlayerConnectedCallback = callback;
@@ -33,8 +35,17 @@ var networkManager = {
     },
     onUpdatePlayerList: function(callback){
         onUpdatePlayerListCallback = callback;
-    }
+    },
+    onReceiveChatMessage: function(callback){
+        onReceiveChatMessageCallback = callback;
+    },
+    sendChatMessage: function(textMessage){
+        serverSocket.emit('CLIENT_CHAT_MESSAGE', {
+            uid: mainPlayer.uid,
+            text: textMessage
+        });
 
+    }
 };
 
 function onConnectedToServer() {
@@ -61,5 +72,8 @@ function onReceivePlayerList(listPlayers){
     onUpdatePlayerListCallback(listPlayers);
 }
 
+function onReceiveChatMessage(messageInfo){
+    onReceiveChatMessageCallback(messageInfo);
+}
 
 module.exports = networkManager;

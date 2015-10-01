@@ -3,6 +3,7 @@
 var CharacterObj = require('client/gameObjects/CharacterObj');
 var Pathfinder = require('client/utils/Pathfinder');
 var NetworkManager = require('client/utils/NetworkManager');
+var ChatManager = require('client/utils/ChatManager');
 
 function Play(){}
 
@@ -15,6 +16,7 @@ Play.prototype = {
         this.initPathfinder();
         this.initCursor();
         this.addMainPlayer();
+        this.initChatModule();
 
         this.connectToServer();
 
@@ -131,6 +133,17 @@ Play.prototype = {
             }
 
         }
+    },
+
+    initChatModule: function(){
+        ChatManager.init(this.game.parent);
+        ChatManager.onMainPlayerSendMessage(function(textMessage){
+            ChatManager.appendMessage('moi', textMessage);
+        });
+
+        NetworkManager.onReceiveChatMessage(function(messageInfo){
+            ChatManager.appendMessage('player', messageInfo.text);
+        });
     },
 
     update: function(){
