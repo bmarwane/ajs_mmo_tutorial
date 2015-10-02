@@ -3,10 +3,11 @@
 var NetworkManager = require('client/utils/NetworkManager');
 
 var chatInput, messagesBox, onMainPlayerSendMessageCallback;
+var mainPlayerName;
 
 function init(containerId){
     initGuiElements(containerId);
-    appendMessage('SYSTEM', 'Welcome');
+    appendSystemMessage('info', 'Welcome to this Demo');
 }
 
 function initGuiElements(containerId){
@@ -50,9 +51,28 @@ function onMainPlayerSendMessage(callback){
     onMainPlayerSendMessageCallback = callback;
 }
 
-function appendMessage(author, message){
-    var htmlMessage = '<span class="message-author"> [' + author + ']</span> : ' + message;
+function appendMessage(author, message, messageType){
+    var cssTypeSuffix = '';
+    if(messageType !== undefined){
+        cssTypeSuffix = 'game-message-type-' + messageType;
+    }
+
+    var htmlMessage = '<span class="' + cssTypeSuffix + '"><span class="message-author"> [' + author + ']</span> : ' + message + '</span>';
     messagesBox.innerHTML += htmlMessage + '<br />';
+
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+}
+
+function appendSystemMessage(type, message){
+    appendMessage('SYSTEM', message, type);
+}
+
+function setMainPlayerName(nickName){
+    if(!nickName || nickName.length === 0){
+        return false;
+    }
+    mainPlayerName = escapeHtml(nickName);
+    return mainPlayerName;
 }
 
 function escapeHtml(unsafe) {
@@ -67,5 +87,7 @@ function escapeHtml(unsafe) {
 module.exports = {
     init: init,
     appendMessage: appendMessage,
-    onMainPlayerSendMessage: onMainPlayerSendMessage
+    systemMessage: appendSystemMessage,
+    onMainPlayerSendMessage: onMainPlayerSendMessage,
+    setMainPlayerName: setMainPlayerName
 };

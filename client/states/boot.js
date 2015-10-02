@@ -13,7 +13,7 @@ Boot.prototype = {
     },
 
     onLoadComplete: function(){
-        this.game.state.start('play');
+        this.game.state.start('login');
     },
 
     loadAssets: function(){

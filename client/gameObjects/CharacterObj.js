@@ -163,6 +163,7 @@ CharacterObj.prototype.getInfo = function(){
   this.info.x = this.sprite.position.x;
   this.info.y = this.sprite.position.y;
   this.info.uid = this.uid;
+  this.info.nickname = this.nickname;
 
   return this.info;
 };

@@ -42,6 +42,7 @@ var networkManager = {
     sendChatMessage: function(textMessage){
         serverSocket.emit('CLIENT_CHAT_MESSAGE', {
             uid: mainPlayer.uid,
+            nickname: mainPlayer.nickname,
             text: textMessage
         });
 

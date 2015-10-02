@@ -73,12 +73,15 @@ Play.prototype = {
 
         this.mainPlayer = new CharacterObj(this.game, startX, startY, true);
         this.game.camera.follow(this.mainPlayer.sprite);
+
+        this.mainPlayer.nickname = this.game.mainPlayerName;
     },
 
     connectToServer: function(){
         var me = this;
         NetworkManager.connect(this.mainPlayer);
         NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
+            ChatManager.systemMessage('info', otherPlayerInfo.nickname + ' is connected');
             me.addOtherPlayer(otherPlayerInfo);
         });
         NetworkManager.onOtherPlayerMove(function(movementInfo){
@@ -99,6 +102,7 @@ Play.prototype = {
     addOtherPlayer: function(otherPlayerInfo){
         var otherPlayer = new CharacterObj(this.game, otherPlayerInfo.x, otherPlayerInfo.y, false);
         otherPlayer.uid = otherPlayerInfo.uid;
+        otherPlayer.nickname = otherPlayerInfo.nickname;
         this.otherPlayers.push(otherPlayer);
     },
 
@@ -137,12 +141,13 @@ Play.prototype = {
 
     initChatModule: function(){
         ChatManager.init(this.game.parent);
+        var me = this;
         ChatManager.onMainPlayerSendMessage(function(textMessage){
-            ChatManager.appendMessage('moi', textMessage);
+            ChatManager.appendMessage(me.game.mainPlayerName, textMessage);
         });
 
         NetworkManager.onReceiveChatMessage(function(messageInfo){
-            ChatManager.appendMessage('player', messageInfo.text);
+            ChatManager.appendMessage(messageInfo.nickname, messageInfo.text);
         });
     },
 

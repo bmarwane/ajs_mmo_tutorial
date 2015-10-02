@@ -1,3 +1,8 @@
+@game-font: Verdana;
+
+@import "_chatbox";
+@import "_loginScreen";
+
 body {
   background-color: #333;
   margin:0;
@@ -6,48 +11,4 @@ body {
 #game {
   cursor: pointer;
   width: 800px;
-}
-
-#game-chat-box{
-  @chatboxWidth: 400px;
-  @messagesBoxHeight: 120px;
-  @inputHeight: 20px;
-  @bottomSpacing: 142px;
-  @chatboxBackground: rgba(0,0,0, .5);
-
-  width: @chatboxWidth;
-  float: right;
-
-  position:relative;
-  bottom: @bottomSpacing;
-
-  .game-chat-messages{
-    width: 390px;
-    height: @messagesBoxHeight;
-    background: #000;
-    background: @chatboxBackground;
-    color: white;
-    font-size: 9pt;
-    font-family: Verdana;
-
-    padding-left: 5px;
-    padding-right: 5px;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-  }
-
-  .game-chat-input{
-    width: 100%;
-    border: 0;
-    height: @inputHeight;
-    font-size:9pt;
-  }
-
-  .message-author{
-    color: #E9D246;
-  }
 }
