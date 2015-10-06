@@ -36,7 +36,7 @@ var networkManager = {
     onUpdatePlayerList: function(callback){
         onUpdatePlayerListCallback = callback;
     },
-    onReceiveChatMessage: function(callback){
+    setOnReceiveChatMessage: function(callback){
         onReceiveChatMessageCallback = callback;
     },
     sendChatMessage: function(textMessage){

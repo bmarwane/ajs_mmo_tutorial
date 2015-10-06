@@ -148,7 +148,7 @@ Play.prototype = {
         ChatManager.init(this.game.parent);
         var me = this;
 
-        NetworkManager.onReceiveChatMessage(function(messageInfo){
+        NetworkManager.setOnReceiveChatMessage(function(messageInfo){
             ChatManager.appendMessage(messageInfo.nickname, messageInfo.text);
         });
     },
