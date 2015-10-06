@@ -2,14 +2,26 @@
 
 var NetworkManager = require('client/utils/NetworkManager');
 
-var chatInput, messagesBox, onMainPlayerSendMessageCallback;
+var chatInput, messagesBox;
 var mainPlayerName;
 
 function init(containerId){
     initGuiElements(containerId);
-    appendSystemMessage('info', 'Welcome to this Demo');
+    appendSystemMessage('info', 'Welcome ' + mainPlayerName + ' to this Demo');
 }
 
+/*
+ Create the html structure that correspond to this :
+
+ <div id="game-chat-box">
+     <div class="game-chat-messages">
+        Messages goes here
+     </div>
+     <form>
+        <input type="text" class="game-chat-input">
+     </form>
+ </div>
+ */
 function initGuiElements(containerId){
     var container = document.getElementById(containerId);
 
@@ -38,17 +50,17 @@ function initGuiElements(containerId){
 function onSendMessage(){
     var textMessage = escapeHtml(chatInput.value);
 
-    onMainPlayerSendMessageCallback(textMessage);
-
     NetworkManager.sendChatMessage(textMessage);
+
+    appendMessage(mainPlayerName, textMessage);
 
     chatInput.value = '';
 
     return false;
 }
 
-function onMainPlayerSendMessage(callback){
-    onMainPlayerSendMessageCallback = callback;
+function appendSystemMessage(type, message){
+    appendMessage('*', message, type);
 }
 
 function appendMessage(author, message, messageType){
@@ -57,14 +69,10 @@ function appendMessage(author, message, messageType){
         cssTypeSuffix = 'game-message-type-' + messageType;
     }
 
-    var htmlMessage = '<span class="' + cssTypeSuffix + '"><span class="message-author"> [' + author + ']</span> : ' + message + '</span>';
+    var htmlMessage = '<span class="game-message ' + cssTypeSuffix + '"><span class="game-message-author"> [' + author + ']</span> : ' + message + '</span>';
     messagesBox.innerHTML += htmlMessage + '<br />';
 
     messagesBox.scrollTop = messagesBox.scrollHeight;
-}
-
-function appendSystemMessage(type, message){
-    appendMessage('SYSTEM', message, type);
 }
 
 function setMainPlayerName(nickName){
@@ -88,6 +96,5 @@ module.exports = {
     init: init,
     appendMessage: appendMessage,
     systemMessage: appendSystemMessage,
-    onMainPlayerSendMessage: onMainPlayerSendMessage,
     setMainPlayerName: setMainPlayerName
 };

@@ -80,10 +80,13 @@ Play.prototype = {
     connectToServer: function(){
         var me = this;
         NetworkManager.connect(this.mainPlayer);
+
         NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
             ChatManager.systemMessage('info', otherPlayerInfo.nickname + ' is connected');
             me.addOtherPlayer(otherPlayerInfo);
         });
+
+        // set what to do when the current player receive movement information about another player
         NetworkManager.onOtherPlayerMove(function(movementInfo){
             var otherPlayerToMove = searchById(me.otherPlayers, movementInfo.uid);
             if(otherPlayerToMove){
@@ -91,6 +94,7 @@ Play.prototype = {
             }
         });
 
+        // set what to do when the client receive the players list from the server
         NetworkManager.onUpdatePlayerList(function(receivedList){
             me.removeDisconnected(receivedList);
             me.addConnected(receivedList);
@@ -119,6 +123,7 @@ Play.prototype = {
             } else {
                 // remove from the game
                 otherPlayer.destroy();
+                ChatManager.systemMessage('error', otherPlayer.nickname + ' have disconnected');
             }
         }
         this.otherPlayers = newOtherPlayers;
@@ -142,9 +147,6 @@ Play.prototype = {
     initChatModule: function(){
         ChatManager.init(this.game.parent);
         var me = this;
-        ChatManager.onMainPlayerSendMessage(function(textMessage){
-            ChatManager.appendMessage(me.game.mainPlayerName, textMessage);
-        });
 
         NetworkManager.onReceiveChatMessage(function(messageInfo){
             ChatManager.appendMessage(messageInfo.nickname, messageInfo.text);

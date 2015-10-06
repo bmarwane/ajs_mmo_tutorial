@@ -1,9 +1,11 @@
 #game-chat-box{
+
+  // variables to make the chat box configuration a little bit less confusing
   @chatboxWidth: 400px;
   @messagesBoxHeight: 120px;
   @inputHeight: 20px;
   @bottomSpacing: 142px;
-  @chatboxBackground: rgba(0,0,0, .5);
+
 
   width: @chatboxWidth;
   float: right;
@@ -17,7 +19,7 @@
 
     overflow-y: scroll;
     background: #000;
-    background: @chatboxBackground;
+    background: rgba(0,0,0, .5);
     color: white;
     font-size: 9pt;
     font-family: @game-font;
@@ -39,13 +41,23 @@
     font-size:9pt;
   }
 
-  .message-author{
+  .game-message-author{
     color: #E9D246;
   }
 
-  .game-message-type-info {
+  .game-message {
     font-size: 8pt;
     font-weight: bold;
+  }
+  .game-message-type-info {
+    .message-author{
+      font-style: italic;
+      color: #dbe7ff;
+    }
+  }
+
+  .game-message-type-error {
+    color: #ff5b54;
 
     .message-author{
       font-style: italic;

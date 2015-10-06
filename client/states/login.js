@@ -1,7 +1,6 @@
 'use strict';
 
 var ChatManager = require('client/utils/ChatManager');
-var NetworkManager = require('client/utils/NetworkManager');
 var DomHelper = require('client/utils/DomHelper');
 
 var nickNameInput;
@@ -25,10 +24,9 @@ Login.prototype = {
         var form = DomHelper.form(saveName);
         var blockInput = DomHelper.inputBlock();
 
-        nickNameInput = DomHelper.inputWithLabel(blockInput, 'Nickname', 200, 200);
+        nickNameInput = DomHelper.inputWithLabel(blockInput, 'Enter a nickname', 200, 200);
 
-        var saveButton = DomHelper.createButton('GO !!', 'game-login-button'    );
-
+        var saveButton = DomHelper.createButton('GO !!', 'game-login-button');
 
         form.appendChild(blockInput);
         form.appendChild(saveButton);
