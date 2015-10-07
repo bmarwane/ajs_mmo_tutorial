@@ -123,7 +123,7 @@ Play.prototype = {
             } else {
                 // remove from the game
                 otherPlayer.destroy();
-                ChatManager.systemMessage('error', otherPlayer.nickname + ' have disconnected');
+                ChatManager.systemMessage('error', otherPlayer.nickname + ' disconnected');
             }
         }
         this.otherPlayers = newOtherPlayers;
