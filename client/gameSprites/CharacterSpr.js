@@ -20,23 +20,23 @@ CharacterSpr.prototype.setupAnimations = function() {
     this.anchor.setTo(0.5, 0.5);
 
     this.animations.add('walk_down', [
-        "walk/down/0.png",
-        "walk/down/1.png",
-        "walk/down/0.png",
-        "walk/down/2.png"
+        "character/walk/down/0.png",
+        "character/walk/down/1.png",
+        "character/walk/down/0.png",
+        "character/walk/down/2.png"
     ], 60, true);
     this.animations.add('walk_up', [
-        "walk/up/0.png",
-        "walk/up/1.png",
-        "walk/up/0.png",
-        "walk/up/2.png"
+        "character/walk/up/0.png",
+        "character/walk/up/1.png",
+        "character/walk/up/0.png",
+        "character/walk/up/2.png"
     ], 60, true);
 
     this.animations.add('walk_side', [
-        "walk/side/0.png",
-        "walk/side/1.png",
-        "walk/side/0.png",
-        "walk/side/2.png"
+        "character/walk/side/0.png",
+        "character/walk/side/1.png",
+        "character/walk/side/0.png",
+        "character/walk/side/2.png"
     ], 60, true);
 
 };

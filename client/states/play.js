@@ -2,8 +2,9 @@
 
 var CharacterObj = require('client/gameObjects/CharacterObj');
 var Pathfinder = require('client/utils/Pathfinder');
-var NetworkManager = require('client/utils/NetworkManager');
+var NetworkManager = require('client/network/NetworkManager');
 var ChatManager = require('client/utils/ChatManager');
+var MapDataClient = require('client/network/MapDataClient');
 
 function Play(){}
 
@@ -15,11 +16,15 @@ Play.prototype = {
         this.initMap();
         this.initPathfinder();
         this.initCursor();
+        this.setupSpriteGroups();
         this.addMainPlayer();
         this.initChatModule();
 
         this.connectToServer();
-
+    },
+    setupSpriteGroups: function(){
+        this.game.mmo_group_collectables = this.game.add.group();
+        this.game.mmo_group_characters = this.game.add.group();
     },
     initMap: function(){
         this.map = this.game.add.tilemap('map');
@@ -79,7 +84,7 @@ Play.prototype = {
 
     connectToServer: function(){
         var me = this;
-        NetworkManager.connect(this.mainPlayer);
+        var serverSocket = NetworkManager.connect(this.mainPlayer);
 
         NetworkManager.onOtherPlayerConnected(function(otherPlayerInfo){
             ChatManager.systemMessage('info', otherPlayerInfo.nickname + ' is connected');
@@ -101,6 +106,8 @@ Play.prototype = {
 
         });
         this.otherPlayers = [];
+
+        this.synchronizeMapData(serverSocket);
     },
 
     addOtherPlayer: function(otherPlayerInfo){
@@ -151,6 +158,10 @@ Play.prototype = {
         NetworkManager.setOnReceiveChatMessage(function(messageInfo){
             ChatManager.appendMessage(messageInfo.nickname, messageInfo.text);
         });
+    },
+
+    synchronizeMapData: function(serverSocket){
+        MapDataClient.synchronize(serverSocket, this);
     },
 
     update: function(){

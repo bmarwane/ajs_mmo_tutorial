@@ -39,6 +39,59 @@
          "name":"collision",
          "opacity":1,
          "type":"tilelayer",
+         "visible":false,
+         "width":50,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":50,
+         "name":"s_collectable",
+         "objects":[
+                {
+                 "gid":2019,
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+                     "value":"20"
+                    },
+                 "type":"Gold",
+                 "visible":true,
+                 "width":0,
+                 "x":96,
+                 "y":320
+                }, 
+                {
+                 "gid":2019,
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"Gold",
+                 "visible":true,
+                 "width":0,
+                 "x":641,
+                 "y":192
+                }, 
+                {
+                 "gid":2019,
+                 "height":0,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"Gold",
+                 "visible":true,
+                 "width":0,
+                 "x":322,
+                 "y":449
+                }],
+         "opacity":1,
+         "type":"objectgroup",
          "visible":true,
          "width":50,
          "x":0,
@@ -73,6 +126,21 @@
          "imagewidth":32,
          "margin":0,
          "name":"collision",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":2019,
+         "image":"server_objects.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"Server Objects",
          "properties":
             {
 

@@ -6,6 +6,9 @@
  <tileset firstgid="2017" name="collision" tilewidth="32" tileheight="32">
   <image source="walkable.png" width="32" height="64"/>
  </tileset>
+ <tileset firstgid="2019" name="Server Objects" tilewidth="32" tileheight="32">
+  <image source="server_objects.png" width="32" height="32"/>
+ </tileset>
  <layer name="ground" width="50" height="50">
   <data encoding="base64" compression="zlib">
    eJztwwEJAAAMBKGr9/0LLcdAwVVTVVVVVVVVVVXV5w+OTMkD
@@ -21,9 +24,18 @@
    eJzt2rENACEMwMBUTAqbwCb8nk8TsYKDfFJEG4RLImrrLWK0e1aV+88zq/A9cv995it8j9zfrhjsisWuWOyKxa5Y7IrFrljsisWuWOyKxa5Y7IrFrljsisWuWOyKxa5Y7IrFrljsisWuWOyK5ZWuXvl/le/xA9uXaiA=
   </data>
  </layer>
- <layer name="collision" width="50" height="50">
+ <layer name="collision" width="50" height="50" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt2E0SgzAIBWB3vf8R25N0umtn1PDg8RNKZrIzxk9Q0OOYUWm8HvvPb8tTMKXHRc5x1PJOPPKvu4OjSzzG8bsGmeOQ54HGwdr7Xx3svBpHbwdj3wqOLvFgrFs5rDaLA1lbNR7o2uoOpMfwdHjfB8t/hmiHpB+p7lhZNA5v5+q+r5yIQ/Lseb0v7mKC5lXGNxKSX+jzkWlBHUieRfZRV32H9X0V7fFyaC3M3otZP9B/DKj57twedRDxSOqC5FxefbvFgsbVKx5n16hxoPtU6K8YzybTYcnDCg5G7bDuf+ZAexRrHL0cUTFgWTQOz/4jypHVP7Ec0T0teozEkVFXdq2DXR0adyfHVY+80/yMN7msKd8=
   </data>
  </layer>
+ <objectgroup name="s_collectable" width="50" height="50">
+  <object type="Gold" gid="2019" x="96" y="320">
+   <properties>
+    <property name="value" value="20"/>
+   </properties>
+  </object>
+  <object type="Gold" gid="2019" x="641" y="192"/>
+  <object type="Gold" gid="2019" x="322" y="449"/>
+ </objectgroup>
 </map>

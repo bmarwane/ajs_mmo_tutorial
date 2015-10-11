@@ -15,6 +15,7 @@ var networkManager = {
 
         this.configureIncomingTraffic();
 
+        return serverSocket;
     },
     configureIncomingTraffic: function(){
         serverSocket.on('SERVER_PLAYER_ID', onReceivePlayerId);

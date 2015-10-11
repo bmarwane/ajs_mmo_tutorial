@@ -1,5 +1,7 @@
-
 // game server : handle socket communication related to the game mechanics
+
+var ArrayUtils = require('../utils/Arrays');
+var mapDataServer = require('./MapSync/mapDataServer');
 
 var socketIO, listPlayers = [];
 var NICKNAME_MAX_LENGTH = 16;
@@ -9,6 +11,7 @@ var GameServer = function(io){
     socketIO = io;
     return {
         start: function(){
+            mapDataServer.init();
             socketIO.on('connection', onClientConnected);
         }
     };
@@ -22,6 +25,8 @@ function onClientConnected(client){
     client.on('CLIENT_CHAT_MESSAGE', onChatMessage);
 
     client.on('disconnect', onDisconnected);
+
+    mapDataServer.synchronizeClient(client);
 
     function onRequestId(playerInfo) {
         // respond the connected player with his ID
@@ -55,7 +60,7 @@ function onClientConnected(client){
     }
 
     function onDisconnected(){
-        listPlayers = removeElementById(listPlayers, client.id);
+        listPlayers = ArrayUtils.removeElementById(listPlayers, client.id);
         client.broadcast.emit('SERVER_PLAYER_LIST', listPlayers);
     }
 
@@ -69,20 +74,8 @@ function onClientConnected(client){
 }
 
 function getPlayerById( id){
-    for(var i = 0, max = listPlayers.length; i < max; i++){
-        if(listPlayers[i].uid === id){
-            return listPlayers[i];
-        }
-    }
-    return undefined;
+    return ArrayUtils.getObjectInArrayById(listPlayers, id);
 }
-
-function removeElementById(array, id){
-    return array.filter(function( obj ) {
-        return obj.uid !== id;
-    });
-}
-
 
 // basic security check
 function filterInput(input, maxLength){

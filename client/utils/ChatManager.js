@@ -1,6 +1,6 @@
 'use strict';
 
-var NetworkManager = require('client/utils/NetworkManager');
+var NetworkManager = require('client/network/NetworkManager');
 
 var chatInput, messagesBox;
 var mainPlayerName;

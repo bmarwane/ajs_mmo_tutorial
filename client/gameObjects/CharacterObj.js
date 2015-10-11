@@ -2,7 +2,7 @@
 
 var CharacterSpr = require('client/gameSprites/CharacterSpr');
 var Pathfinder = require('client/utils/Pathfinder');
-var NetworkManager = require('client/utils/NetworkManager');
+var NetworkManager = require('client/network/NetworkManager');
 
 
 var CharacterObj = function(game, x, y, isMainPlayer) {
@@ -25,6 +25,7 @@ CharacterObj.prototype.configure = function(game, isMainPlayer){
 CharacterObj.prototype.setupSprite = function(x, y){
     this.sprite = new CharacterSpr(this.game, x, y, this.isMainPlayer);
     this.game.add.existing(this.sprite);
+    this.game.mmo_group_characters.add(this.sprite);
 
     this.sprite.walkDown();
 };
