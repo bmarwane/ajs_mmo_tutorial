@@ -1,5 +1,7 @@
 'use strict';
 
+var collideWithCollectableCallback;
+
 var CharacterSpr = function(game, x, y, isCollisionEnabled) {
     Phaser.Sprite.call(this, game, x, y, 'sprites');
     if(isCollisionEnabled){
@@ -12,9 +14,14 @@ CharacterSpr.prototype = Object.create(Phaser.Sprite.prototype);
 CharacterSpr.prototype.constructor = CharacterSpr;
 
 CharacterSpr.prototype.enableCollision = function() {
-    this.game.physics.enable(this);
+    this.game.physics.arcade.enable(this);
     this.body.fixedRotation = true;
 };
+
+CharacterSpr.prototype.setOnCollideWithCollectableSprite = function(callback){
+    this.game.physics.arcade.overlap(this, this.game.mmo_group_collectables, callback);
+};
+
 
 CharacterSpr.prototype.setupAnimations = function() {
     this.anchor.setTo(0.5, 0.5);

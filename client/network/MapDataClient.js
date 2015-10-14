@@ -17,6 +17,14 @@ function onReadyToRequestCollectables(){
     serverSocket.emit('CLIENT_GET_ALL_COLLECTABLES');
 }
 
+function tryToCollectForPlayer(collectable, player){
+    var collisionInfo = {
+        collectable: collectable,
+        player: player
+    };
+    serverSocket.emit('CLIENT_TRY_TO_COLLECT', collisionInfo);
+}
+
 
 function onReceiveAllCollectables(collectableList) {
 
@@ -38,5 +46,6 @@ function setConcernedPhaserState(state){
 }
 
 module.exports = {
-    synchronize : synchronize
+    synchronize : synchronize,
+    tryToCollectForPlayer: tryToCollectForPlayer
 };

@@ -58,7 +58,6 @@ function onConnectedToServer() {
 
 function onReceivePlayerId(mainPlayerID) {
     mainPlayer.uid = mainPlayerID;
-    console.log("mon id", mainPlayerID)
 }
 
 function onPlayerConnected(otherPlayer){

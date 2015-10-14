@@ -18,6 +18,7 @@ Play.prototype = {
         this.initCursor();
         this.setupSpriteGroups();
         this.addMainPlayer();
+        this.configPlayerCollisions();
         this.initChatModule();
 
         this.connectToServer();
@@ -80,6 +81,12 @@ Play.prototype = {
         this.game.camera.follow(this.mainPlayer.sprite);
 
         this.mainPlayer.nickname = this.game.mainPlayerName;
+    },
+
+    configPlayerCollisions: function(){
+        this.mainPlayer.setOnCollideCollectableMapAction(function(collectable) {
+            // check status on server then decide what to do
+        });
     },
 
     connectToServer: function(){
@@ -164,8 +171,15 @@ Play.prototype = {
         MapDataClient.synchronize(serverSocket, this);
     },
 
+    checkMainPlayerCollision: function() {
+        if(this.mainPlayer !== undefined) {
+            this.mainPlayer.checkCollision();
+        }
+    },
+
     update: function(){
         this.updateCursorPosition();
+        this.checkMainPlayerCollision();
     }
 };
 

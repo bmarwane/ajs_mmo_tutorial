@@ -3,7 +3,7 @@ function Gold(id, x, y) {
     this.x = x;
     this.y = y;
 
-    this.available = true;
+    this.isAvailable = true;
     this.type = 'Gold';
 }
 

@@ -4,6 +4,7 @@ var CharacterSpr = require('client/gameSprites/CharacterSpr');
 var Pathfinder = require('client/utils/Pathfinder');
 var NetworkManager = require('client/network/NetworkManager');
 
+var collideWithCollectableMapAction;
 
 var CharacterObj = function(game, x, y, isMainPlayer) {
     this.configure(game, isMainPlayer);
@@ -140,6 +141,29 @@ CharacterObj.prototype.faceNextTile = function(tween){
             this.sprite.walkUp();
         }
 
+    }
+};
+
+/*
+ Check if the Character sprite collide with a collectable object sprite and set the function
+ to execute when a collision occurs
+ */
+CharacterObj.prototype.checkCollision = function(){
+    this.sprite.setOnCollideWithCollectableSprite(this.onCollideWithCollectable);
+};
+
+/*
+Set an external function to be executed when the Player collide with a collectable
+ */
+CharacterObj.prototype.setOnCollideCollectableMapAction = function(callback){
+    collideWithCollectableMapAction = callback;
+};
+
+CharacterObj.prototype.onCollideWithCollectable = function(me, collectableSprite){
+    var collectableObj = collectableSprite.collectableObj;
+
+    if(collideWithCollectableMapAction) {
+        collideWithCollectableMapAction(collectableObj);
     }
 };
 
