@@ -1,5 +1,5 @@
 function Gold(id, x, y) {
-    this.id = id;
+    this.uid = id;
     this.x = x;
     this.y = y;
 

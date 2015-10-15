@@ -84,8 +84,10 @@ Play.prototype = {
     },
 
     configPlayerCollisions: function(){
+        var me = this;
         this.mainPlayer.setOnCollideCollectableMapAction(function(collectable) {
-            // check status on server then decide what to do
+            collectable.destroy();
+            MapDataClient.tryToCollectForPlayer(collectable, me.mainPlayer);
         });
     },
 

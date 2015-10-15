@@ -2,6 +2,7 @@
  * Manage Main map Objects
  */
 var MapFile = require('../../../client/assets/gameAssets/map/map.json');
+var ArrayUtils = require('../../utils/Arrays');
 
 var Gold = require('./Collectable/Gold');
 
@@ -33,11 +34,30 @@ function loadCollectablesFromMapFile(){
 
 function synchronizeClient(client){
     client.on('CLIENT_GET_ALL_COLLECTABLES', onGetAllCollectables);
+    client.on('CLIENT_TRY_TO_COLLECT', onClientAskToCollect);
+
 
     function onGetAllCollectables() {
         client.emit('SERVER_ALL_COLLECTABLES', collectableObjects);
     }
+
+    function onClientAskToCollect(collisionInfo){
+        var targetColectable = ArrayUtils.getObjectInArrayById(collectableObjects, collisionInfo.collectableId);
+        if(targetColectable.isAvailable){
+            targetColectable.isAvailable = false;
+            targetColectable.ownedBy = collisionInfo.playerId;
+            updateCollectableStatus(targetColectable);
+        }
+
+    }
+
+    function updateCollectableStatus(collectable){
+        client.broadcast.emit('SERVER_COLLECTABLE_DESTROY', collectable);
+
+    }
 }
+
+
 
 
 
