@@ -49,8 +49,6 @@ module.exports = {
     },
 
     inputWithLabel: function(parent, label, x, y){
-
-
         var nameLabel = document.createElement('div');
         nameLabel.className='game-gui-label';
         nameLabel.innerText = label;
@@ -72,6 +70,18 @@ module.exports = {
 
         button.innerText = label;
         return button;
-    }
+    },
+
+    createElement: function(elementName, className){
+        var element = document.createElement(elementName);
+        element.className = className;
+        return element;
+    },
+
+    addToContainer: function(element){
+        containerElement.appendChild(element);
+    },
+    getX: getX,
+    getY: getY
 
 };

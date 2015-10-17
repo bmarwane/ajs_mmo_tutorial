@@ -1,10 +1,13 @@
 /*
  * Manage Main map Objects
  */
-var MapFile = require('../../../client/assets/gameAssets/map/map.json');
-var ArrayUtils = require('../../utils/Arrays');
 
+var ArrayUtils = require('../../utils/Arrays');
+var playersManager = require('./PlayersManager');
 var Gold = require('./Collectable/Gold');
+
+
+var MapFile = require('../../../client/assets/gameAssets/map/map.json');
 
 var collectableObjects = [];
 
@@ -39,23 +42,34 @@ function synchronizeClient(client){
 
     function onGetAllCollectables() {
         client.emit('SERVER_ALL_COLLECTABLES', collectableObjects);
+        sendPlayersScores();
     }
 
     function onClientAskToCollect(collisionInfo){
         var targetColectable = ArrayUtils.getObjectInArrayById(collectableObjects, collisionInfo.collectableId);
         if(targetColectable.isAvailable){
             targetColectable.isAvailable = false;
-            targetColectable.ownedBy = collisionInfo.playerId;
-            updateCollectableStatus(targetColectable);
-        }
 
+            notifyCollectableDestroy(targetColectable);
+            addPlayerScore(collisionInfo.playerId, targetColectable.scoreValue);
+            sendPlayersScores();
+        }
     }
 
-    function updateCollectableStatus(collectable){
-        client.broadcast.emit('SERVER_COLLECTABLE_DESTROY', collectable);
+    function addPlayerScore(playerId, scoreToAdd){
+        var concernedPlayer = playersManager.getPlayerById(playerId);
+        concernedPlayer.score += scoreToAdd;
+    }
 
+    function notifyCollectableDestroy(collectable){
+        client.broadcast.emit('SERVER_COLLECTABLE_DESTROY', collectable);
+    }
+
+    function sendPlayersScores(){
+        client.server.emit('SERVER_UPDATE_PLAYER_SCORES', playersManager.getPlayersList());
     }
 }
+
 
 
 

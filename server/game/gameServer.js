@@ -1,9 +1,9 @@
 // game server : handle socket communication related to the game mechanics
 
-var ArrayUtils = require('../utils/Arrays');
 var mapDataServer = require('./MapSync/mapDataServer');
+var playersManager = require('./MapSync/PlayersManager');
 
-var socketIO, listPlayers = [];
+var socketIO;
 var NICKNAME_MAX_LENGTH = 16;
 var MESSAGE_MAX_LENGTH = 100;
 
@@ -41,14 +41,15 @@ function onClientConnected(client){
 
     function notifyConnectedPlayer(client, playerInfo){
         playerInfo.uid = client.id;
-        listPlayers.push(playerInfo);
+        playerInfo.score = 0;
+        playersManager.addPlayer(playerInfo);
         client.broadcast.emit('SERVER_PLAYER_CONNECTED', playerInfo);
     }
 
     function onNotifyPlayerMovement(movementInfo){
         client.broadcast.emit('SERVER_OTHER_PLAYER_MOVED', movementInfo);
         // update state on server
-        var concernedPlayer = getPlayerById(movementInfo.uid);
+        var concernedPlayer = playersManager.getPlayerById(movementInfo.uid);
         if(concernedPlayer){
             concernedPlayer.x = movementInfo.x;
             concernedPlayer.y = movementInfo.y;
@@ -56,12 +57,12 @@ function onClientConnected(client){
     }
 
     function onRequestPlayerList(){
-        client.emit('SERVER_PLAYER_LIST', listPlayers);
+        client.emit('SERVER_PLAYER_LIST', playersManager.getPlayersList());
     }
 
     function onDisconnected(){
-        listPlayers = ArrayUtils.removeElementById(listPlayers, client.id);
-        client.broadcast.emit('SERVER_PLAYER_LIST', listPlayers);
+        playersManager.removePlayerById(client.id);
+        client.broadcast.emit('SERVER_PLAYER_LIST', playersManager.getPlayersList());
     }
 
 
@@ -71,10 +72,6 @@ function onClientConnected(client){
 
         client.broadcast.emit('SERVER_PLAYER_CHAT_MESSAGE', chatMessageInfo);
     }
-}
-
-function getPlayerById( id){
-    return ArrayUtils.getObjectInArrayById(listPlayers, id);
 }
 
 // basic security check

@@ -37,5 +37,28 @@
   </object>
   <object type="Gold" gid="2019" x="641" y="192"/>
   <object type="Gold" gid="2019" x="322" y="449"/>
+  <object type="Gold" gid="2019" x="95" y="417"/>
+  <object type="Gold" gid="2019" x="191" y="545"/>
+  <object type="Gold" gid="2019" x="96" y="195"/>
+  <object type="Gold" gid="2019" x="415" y="257"/>
+  <object type="Gold" gid="2019" x="413" y="673"/>
+  <object type="Gold" gid="2019" x="132" y="800"/>
+  <object type="Gold" gid="2019" x="676" y="834"/>
+  <object type="Gold" gid="2019" x="862" y="612"/>
+  <object type="Gold" gid="2019" x="926" y="288"/>
+  <object type="Gold" gid="2019" x="1344" y="1282"/>
+  <object type="Gold" gid="2019" x="774" y="1443"/>
+  <object type="Gold" gid="2019" x="577" y="1504"/>
+  <object type="Gold" gid="2019" x="95" y="1538"/>
+  <object type="Gold" gid="2019" x="482" y="1090"/>
+  <object type="Gold" gid="2019" x="286" y="1213"/>
+  <object type="Gold" gid="2019" x="933" y="773"/>
+  <object type="Gold" gid="2019" x="1250" y="258"/>
+  <object type="Gold" gid="2019" x="1378" y="607"/>
+  <object type="Gold" gid="2019" x="1313" y="1505"/>
+  <object type="Gold" gid="2019" x="1217" y="1407"/>
+  <object type="Gold" gid="2019" x="1120" y="383"/>
+  <object type="Gold" gid="2019" x="579" y="320"/>
+  <object type="Gold" gid="2019" x="544" y="612"/>
  </objectgroup>
 </map>

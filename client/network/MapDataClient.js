@@ -1,6 +1,7 @@
 'use strict';
 
 var CollectableObj = require('client/gameObjects/CollectableObj');
+var scoreBoard = require('client/utils/ScoreBoard');
 
 var serverSocket, concernedPhaserState;
 var collectableObjects = [];
@@ -13,6 +14,10 @@ function synchronize(socket, phaserState){
     serverSocket.on('SERVER_PLAYER_ID', onReadyToRequestCollectables);
     serverSocket.on('SERVER_ALL_COLLECTABLES', onReceiveAllCollectables);
     serverSocket.on('SERVER_COLLECTABLE_DESTROY', onDestroyCollectable);
+    serverSocket.on('SERVER_UPDATE_PLAYER_SCORES', onReceiveScores);
+
+    // initialize score board
+    scoreBoard.init();
 }
 
 function onReadyToRequestCollectables(){
@@ -30,6 +35,10 @@ function onDestroyCollectable(newCollectableInfo){
     if(collectableToDestroy !== undefined){
         collectableToDestroy.destroy();
     }
+}
+
+function onReceiveScores(playersList){
+    scoreBoard.setScores(playersList);
 }
 
 function tryToCollectForPlayer(collectable, player){
