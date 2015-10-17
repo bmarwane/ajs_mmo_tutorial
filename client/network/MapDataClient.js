@@ -48,6 +48,7 @@ function tryToCollectForPlayer(collectable, player){
 
 
 function onReceiveAllCollectables(collectableList) {
+    destroyAllCollectables();
 
     collectableList.forEach(function(collectable){
 
@@ -63,6 +64,13 @@ function onReceiveAllCollectables(collectableList) {
         }
         collectableObjects.push(colObj);
     });
+}
+
+function destroyAllCollectables(){
+    collectableObjects.forEach(function(colObject){
+        colObject.destroy();
+    });
+    collectableObjects = [];
 }
 
 function setConcernedPhaserState(state){

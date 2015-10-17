@@ -10,15 +10,21 @@ var Gold = require('./Collectable/Gold');
 var MapFile = require('../../../client/assets/gameAssets/map/map.json');
 
 var collectableObjects = [];
+var serverSocket;
 
 const COLLECTABLE_LAYER_NAME = "s_collectable";
 
 // init the map objects that need to be synchronized
 function init(){
     loadCollectablesFromMapFile();
+
+     // Revive the collectables every 20 seconds for demo purpose
+    reviveCollectablesPeriodically(20);
 }
 
 function loadCollectablesFromMapFile(){
+    collectableObjects = [];
+
     var collectableLayer = MapFile.layers.filter(function( layer ) {
         return layer.name === COLLECTABLE_LAYER_NAME;
     })[0];
@@ -32,6 +38,15 @@ function loadCollectablesFromMapFile(){
     });
 
     console.log('** Collectable objects loaded');
+}
+
+function reviveCollectablesPeriodically(nbSeconds){
+    setInterval(function(){
+        console.log('** Reviving Collectables for demo purpose');
+        loadCollectablesFromMapFile();
+        serverSocket.emit('SERVER_ALL_COLLECTABLES', collectableObjects);
+
+    }, nbSeconds * 1000);
 }
 
 
@@ -71,11 +86,14 @@ function synchronizeClient(client){
 }
 
 
-
+function setServerSocket(socket){
+    serverSocket = socket;
+}
 
 
 
 module.exports = {
     init: init,
-    synchronizeClient: synchronizeClient
+    synchronizeClient: synchronizeClient,
+    setServerSocket: setServerSocket
 };

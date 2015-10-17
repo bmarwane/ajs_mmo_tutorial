@@ -9,6 +9,7 @@ var MESSAGE_MAX_LENGTH = 100;
 
 var GameServer = function(io){
     socketIO = io;
+    mapDataServer.setServerSocket(socketIO);
     return {
         start: function(){
             mapDataServer.init();
