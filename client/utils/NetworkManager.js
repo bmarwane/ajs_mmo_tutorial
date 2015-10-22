@@ -1,4 +1,4 @@
-'use stric';
+'use strict';
 
 var serverSocket, mainPlayer;
 var onOtherPlayerConnectedCallback;

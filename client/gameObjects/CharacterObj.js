@@ -1,4 +1,4 @@
-'use stric';
+'use strict';
 
 var CharacterSpr = require('client/gameSprites/CharacterSpr');
 var Pathfinder = require('client/utils/Pathfinder');

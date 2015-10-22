@@ -1,4 +1,4 @@
-'use stric';
+'use strict';
 
 var NetworkManager = require('client/utils/NetworkManager');
 

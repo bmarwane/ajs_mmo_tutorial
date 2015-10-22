@@ -1,4 +1,4 @@
-'use stric';
+'use strict';
 
 var CharacterObj = require('client/gameObjects/CharacterObj');
 var Pathfinder = require('client/utils/Pathfinder');
