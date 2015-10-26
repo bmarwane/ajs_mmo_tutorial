@@ -1,7 +1,3 @@
-
-
-
-
 function removeElementById(array, id){
     return array.filter(function( obj ) {
         return obj.uid !== id;

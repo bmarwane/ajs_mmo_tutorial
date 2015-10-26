@@ -68,7 +68,9 @@ function onReceiveAllCollectables(collectableList) {
 
 function destroyAllCollectables(){
     collectableObjects.forEach(function(colObject){
-        colObject.destroy();
+        if(colObject){
+            colObject.destroy();
+        }
     });
     collectableObjects = [];
 }

@@ -145,22 +145,22 @@ CharacterObj.prototype.faceNextTile = function(tween){
 };
 
 /*
- Check if the Character sprite collide with a collectable object sprite and set the function
- to execute when a collision occurs
- */
-CharacterObj.prototype.checkCollision = function(){
-    this.sprite.setOnCollideWithCollectableSprite(this.onCollideWithCollectable);
-};
-
-/*
-Set an external function to be executed when the Player collide with a collectable
+ Set an external function to be executed when the Player collide with a collectable
  */
 CharacterObj.prototype.setOnCollideCollectableMapAction = function(callback){
     collideWithCollectableMapAction = callback;
 };
 
-CharacterObj.prototype.onCollideWithCollectable = function(me, collectableSprite){
-    var collectableObj = collectableSprite.collectableObj;
+/*
+ Check if the Character sprite collide with a collectable object sprite and set the function
+ to execute when a collision occurs
+ */
+CharacterObj.prototype.checkCollision = function(){
+    this.sprite.callOnCollideWithCollectableSprite(this.onCollideWithCollectable);
+};
+
+CharacterObj.prototype.onCollideWithCollectable = function(collectableSpr){
+    var collectableObj = collectableSpr.collectableObj;
 
     if(collideWithCollectableMapAction) {
         collideWithCollectableMapAction(collectableObj);

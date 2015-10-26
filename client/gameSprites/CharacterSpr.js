@@ -18,8 +18,10 @@ CharacterSpr.prototype.enableCollision = function() {
     this.body.fixedRotation = true;
 };
 
-CharacterSpr.prototype.setOnCollideWithCollectableSprite = function(callback){
-    this.game.physics.arcade.overlap(this, this.game.mmo_group_collectables, callback);
+CharacterSpr.prototype.callOnCollideWithCollectableSprite = function(callback){
+    this.game.physics.arcade.overlap(this, this.game.mmo_group_collectables, function(playerSpr, collectableSpr){
+        callback(collectableSpr);
+    });
 };
 
 
